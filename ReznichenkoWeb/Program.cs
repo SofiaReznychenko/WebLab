@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
-
+// Main file a project of GYM
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -542,7 +542,7 @@ public class WorkoutsController : ControllerBase
     }
 
     /// <summary>
-    /// Видалити тренування за ідентифікатором
+    /// Видалити тренування за ідентифікатором 
     /// </summary>
     [HttpDelete("{id}")]
     public ActionResult DeleteWorkout(int id)
