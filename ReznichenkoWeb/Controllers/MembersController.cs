@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -8,31 +10,47 @@ public class MembersController : ControllerBase
     private readonly IMemberRepository _memberRepository;
     private readonly IValidator<CreateMemberDto> _createMemberValidator;
     private readonly IValidator<UpdateMemberDto> _updateMemberValidator;
+    private readonly IMemoryCache _cache;
+    private readonly GymSettings _settings;
+    private const string MEMBERS_CACHE_KEY = "members_all";
 
     public MembersController(
         IMemberRepository memberRepository,
         IValidator<CreateMemberDto> createMemberValidator,
-        IValidator<UpdateMemberDto> updateMemberValidator)
+        IValidator<UpdateMemberDto> updateMemberValidator,
+        IMemoryCache cache,
+        IOptionsSnapshot<GymSettings> settings)
     {
         _memberRepository = memberRepository;
         _createMemberValidator = createMemberValidator;
         _updateMemberValidator = updateMemberValidator;
+        _cache = cache;
+        _settings = settings.Value;
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<MemberDto>>> GetAllMembers()
     {
-        var members = await _memberRepository.GetAllAsync();
-        var memberDtos = members.Select(m => new MemberDto
+        if (!_cache.TryGetValue(MEMBERS_CACHE_KEY, out IEnumerable<MemberDto> memberDtos))
         {
-            Id = m.Id,
-            Name = m.Name,
-            Email = m.Email,
-            Phone = m.Phone,
-            JoinDate = m.JoinDate,
-            MembershipType = m.MembershipType,
-            IsActive = m.IsActive
-        });
+            var members = await _memberRepository.GetAllAsync();
+            memberDtos = members.Select(m => new MemberDto
+            {
+                Id = m.Id,
+                Name = m.Name,
+                Email = m.Email,
+                Phone = m.Phone,
+                JoinDate = m.JoinDate,
+                MembershipType = m.MembershipType,
+                IsActive = m.IsActive
+            }).ToList();
+
+            var cacheOptions = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
+
+            _cache.Set(MEMBERS_CACHE_KEY, memberDtos, cacheOptions);
+        }
+
         return Ok(memberDtos);
     }
 
@@ -59,6 +77,11 @@ public class MembersController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<MemberDto>> CreateMember([FromBody] CreateMemberDto createMemberDto)
     {
+        if (!_settings.AllowNewRegistrations)
+        {
+            return BadRequest("Реєстрація нових членів тимчасово припинена адміністратором.");
+        }
+
         var validationResult = await _createMemberValidator.ValidateAsync(createMemberDto);
         if (!validationResult.IsValid)
             return BadRequest(validationResult.Errors);
@@ -74,6 +97,7 @@ public class MembersController : ControllerBase
         };
 
         await _memberRepository.AddAsync(member);
+        _cache.Remove(MEMBERS_CACHE_KEY);
 
         var memberDto = new MemberDto
         {
@@ -107,6 +131,7 @@ public class MembersController : ControllerBase
         member.IsActive = updateMemberDto.IsActive;
 
         await _memberRepository.UpdateAsync(member);
+        _cache.Remove(MEMBERS_CACHE_KEY);
 
         var memberDto = new MemberDto
         {
@@ -130,6 +155,7 @@ public class MembersController : ControllerBase
             return NotFound($"Член з ID {id} не знайдений");
 
         await _memberRepository.DeleteAsync(member);
+        _cache.Remove(MEMBERS_CACHE_KEY);
         return NoContent();
     }
 }

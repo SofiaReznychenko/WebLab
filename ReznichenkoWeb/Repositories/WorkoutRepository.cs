@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 public class WorkoutRepository : Repository<Workout>, IWorkoutRepository
 {
-    public WorkoutRepository(GymContext context) : base(context)
+    public WorkoutRepository(GymContext context, ILogger<WorkoutRepository> logger) : base(context, logger)
     {
     }
 

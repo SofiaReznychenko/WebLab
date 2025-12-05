@@ -4,7 +4,17 @@ using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 
+using Serilog;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Serilog
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -22,6 +32,12 @@ builder.Services.AddSwaggerGen(c =>
 // Configure Database
 builder.Services.AddDbContext<GymContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Configure Settings
+builder.Services.Configure<GymSettings>(builder.Configuration.GetSection("GymSettings"));
+
+// Add Memory Cache
+builder.Services.AddMemoryCache();
 
 // Register Repositories
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
@@ -47,4 +63,16 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
-app.Run();
+try
+{
+    Log.Information("Starting web host");
+    app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Host terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
+}
