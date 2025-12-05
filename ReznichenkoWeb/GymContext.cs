@@ -1,0 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+
+public class GymContext : DbContext
+{
+    public GymContext(DbContextOptions<GymContext> options) : base(options) { }
+
+    public DbSet<Member> Members { get; set; }
+    public DbSet<Workout> Workouts { get; set; }
+}
