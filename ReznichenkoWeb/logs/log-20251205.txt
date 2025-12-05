@@ -22,3 +22,254 @@ RETURNING "Id";
 2025-12-05 23:30:54.595 +01:00 [INF] Executed action MembersController.CreateMember (ReznichenkoWeb) in 455.0813ms
 2025-12-05 23:30:54.595 +01:00 [INF] Executed endpoint 'MembersController.CreateMember (ReznichenkoWeb)'
 2025-12-05 23:30:54.598 +01:00 [INF] Request finished HTTP/1.1 POST http://localhost:5122/api/Members - 201 null application/json; charset=utf-8 491.6452ms
+2025-12-05 23:52:01.326 +01:00 [INF] Starting web host
+2025-12-05 23:52:01.378 +01:00 [INF] Now listening on: http://localhost:5122
+2025-12-05 23:52:01.379 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-05 23:52:01.379 +01:00 [INF] Hosting environment: Development
+2025-12-05 23:52:01.379 +01:00 [INF] Content root path: /Users/macbook/Downloads/ReznichenkoWeb-1/ReznichenkoWeb
+2025-12-05 23:52:02.110 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/swagger/index.html - null null
+2025-12-05 23:52:02.157 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/_framework/aspnetcore-browser-refresh.js - null null
+2025-12-05 23:52:02.159 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/_framework/aspnetcore-browser-refresh.js - 200 16459 application/javascript; charset=utf-8 1.0118ms
+2025-12-05 23:52:02.160 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/swagger/index.html - 200 null text/html;charset=utf-8 50.9552ms
+2025-12-05 23:52:02.334 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/swagger/v1/swagger.json - null null
+2025-12-05 23:52:02.372 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 38.3255ms
+2025-12-05 23:52:25.179 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/index.html - null null
+2025-12-05 23:52:25.189 +01:00 [WRN] Failed to determine the https port for redirect.
+2025-12-05 23:52:25.200 +01:00 [INF] Sending file. Request path: '/index.html'. Physical path: '/Users/macbook/Downloads/ReznichenkoWeb-1/ReznichenkoWeb/wwwroot/index.html'
+2025-12-05 23:52:25.200 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/index.html - 200 null text/html 21.5902ms
+2025-12-05 23:52:25.216 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/css/styles.css - null null
+2025-12-05 23:52:25.218 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/js/app.js - null null
+2025-12-05 23:52:25.219 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/_framework/aspnetcore-browser-refresh.js - null null
+2025-12-05 23:52:25.219 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/_framework/aspnetcore-browser-refresh.js - 200 16459 application/javascript; charset=utf-8 0.2795ms
+2025-12-05 23:52:25.219 +01:00 [INF] Sending file. Request path: '/css/styles.css'. Physical path: '/Users/macbook/Downloads/ReznichenkoWeb-1/ReznichenkoWeb/wwwroot/css/styles.css'
+2025-12-05 23:52:25.219 +01:00 [INF] Sending file. Request path: '/js/app.js'. Physical path: '/Users/macbook/Downloads/ReznichenkoWeb-1/ReznichenkoWeb/wwwroot/js/app.js'
+2025-12-05 23:52:25.220 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/js/app.js - 200 3927 text/javascript 2.5682ms
+2025-12-05 23:52:25.220 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/css/styles.css - 200 1555 text/css 3.9792ms
+2025-12-05 23:52:25.232 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/api/members - null null
+2025-12-05 23:52:25.235 +01:00 [INF] Executing endpoint 'MembersController.GetAllMembers (ReznichenkoWeb)'
+2025-12-05 23:52:25.248 +01:00 [INF] Route matched with {action = "GetAllMembers", controller = "Members"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[MemberDto]]] GetAllMembers() on controller MembersController (ReznichenkoWeb).
+2025-12-05 23:52:25.497 +01:00 [INF] Getting all entities of type Member
+2025-12-05 23:52:25.674 +01:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT m."Id", m."Email", m."IsActive", m."JoinDate", m."MembershipType", m."Name", m."Phone"
+FROM "Members" AS m
+2025-12-05 23:52:25.710 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[MemberDto, ReznichenkoWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-12-05 23:52:25.716 +01:00 [INF] Executed action MembersController.GetAllMembers (ReznichenkoWeb) in 466.7583ms
+2025-12-05 23:52:25.716 +01:00 [INF] Executed endpoint 'MembersController.GetAllMembers (ReznichenkoWeb)'
+2025-12-05 23:52:25.718 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/api/members - 200 null application/json; charset=utf-8 485.5817ms
+2025-12-05 23:53:21.252 +01:00 [INF] Request starting HTTP/1.1 POST http://localhost:5122/api/members - application/json 99
+2025-12-05 23:53:21.256 +01:00 [INF] Executing endpoint 'MembersController.CreateMember (ReznichenkoWeb)'
+2025-12-05 23:53:21.273 +01:00 [INF] Route matched with {action = "CreateMember", controller = "Members"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MemberDto]] CreateMember(CreateMemberDto) on controller MembersController (ReznichenkoWeb).
+2025-12-05 23:53:21.315 +01:00 [INF] Adding new entity of type Member
+2025-12-05 23:53:21.381 +01:00 [INF] Executed DbCommand (9ms) [Parameters=[@p0='?', @p1='?' (DbType = Boolean), @p2='?' (DbType = DateTime), @p3='?', @p4='?', @p5='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Members" ("Email", "IsActive", "JoinDate", "MembershipType", "Name", "Phone")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2025-12-05 23:53:21.390 +01:00 [INF] Executing CreatedAtActionResult, writing value of type 'MemberDto'.
+2025-12-05 23:53:21.397 +01:00 [INF] Executed action MembersController.CreateMember (ReznichenkoWeb) in 124.0835ms
+2025-12-05 23:53:21.397 +01:00 [INF] Executed endpoint 'MembersController.CreateMember (ReznichenkoWeb)'
+2025-12-05 23:53:21.397 +01:00 [INF] Request finished HTTP/1.1 POST http://localhost:5122/api/members - 201 null application/json; charset=utf-8 145.1097ms
+2025-12-05 23:53:21.400 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/api/members - null null
+2025-12-05 23:53:21.400 +01:00 [INF] Executing endpoint 'MembersController.GetAllMembers (ReznichenkoWeb)'
+2025-12-05 23:53:21.401 +01:00 [INF] Route matched with {action = "GetAllMembers", controller = "Members"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[MemberDto]]] GetAllMembers() on controller MembersController (ReznichenkoWeb).
+2025-12-05 23:53:21.405 +01:00 [INF] Getting all entities of type Member
+2025-12-05 23:53:21.407 +01:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT m."Id", m."Email", m."IsActive", m."JoinDate", m."MembershipType", m."Name", m."Phone"
+FROM "Members" AS m
+2025-12-05 23:53:21.407 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[MemberDto, ReznichenkoWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-12-05 23:53:21.407 +01:00 [INF] Executed action MembersController.GetAllMembers (ReznichenkoWeb) in 6.4872ms
+2025-12-05 23:53:21.407 +01:00 [INF] Executed endpoint 'MembersController.GetAllMembers (ReznichenkoWeb)'
+2025-12-05 23:53:21.407 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/api/members - 200 null application/json; charset=utf-8 6.8555ms
+2025-12-05 23:53:33.763 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/api/workouts - null null
+2025-12-05 23:53:33.764 +01:00 [INF] Executing endpoint 'WorkoutsController.GetAllWorkouts (ReznichenkoWeb)'
+2025-12-05 23:53:33.770 +01:00 [INF] Route matched with {action = "GetAllWorkouts", controller = "Workouts"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[WorkoutDto]]] GetAllWorkouts() on controller WorkoutsController (ReznichenkoWeb).
+2025-12-05 23:53:33.783 +01:00 [INF] Getting all entities of type Workout
+2025-12-05 23:53:33.790 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."Description", w."DurationMinutes", w."Instructor", w."MaxParticipants", w."Name", w."ScheduledDateTime", w."WorkoutType"
+FROM "Workouts" AS w
+2025-12-05 23:53:33.791 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[WorkoutDto, ReznichenkoWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-12-05 23:53:33.793 +01:00 [INF] Executed action WorkoutsController.GetAllWorkouts (ReznichenkoWeb) in 22.262ms
+2025-12-05 23:53:33.793 +01:00 [INF] Executed endpoint 'WorkoutsController.GetAllWorkouts (ReznichenkoWeb)'
+2025-12-05 23:53:33.793 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/api/workouts - 200 null application/json; charset=utf-8 30.2332ms
+2025-12-05 23:53:35.142 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/api/members - null null
+2025-12-05 23:53:35.143 +01:00 [INF] Executing endpoint 'MembersController.GetAllMembers (ReznichenkoWeb)'
+2025-12-05 23:53:35.143 +01:00 [INF] Route matched with {action = "GetAllMembers", controller = "Members"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[MemberDto]]] GetAllMembers() on controller MembersController (ReznichenkoWeb).
+2025-12-05 23:53:35.145 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[MemberDto, ReznichenkoWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-12-05 23:53:35.145 +01:00 [INF] Executed action MembersController.GetAllMembers (ReznichenkoWeb) in 1.8948ms
+2025-12-05 23:53:35.145 +01:00 [INF] Executed endpoint 'MembersController.GetAllMembers (ReznichenkoWeb)'
+2025-12-05 23:53:35.146 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/api/members - 200 null application/json; charset=utf-8 3.6035ms
+2025-12-05 23:53:35.694 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/api/workouts - null null
+2025-12-05 23:53:35.695 +01:00 [INF] Executing endpoint 'WorkoutsController.GetAllWorkouts (ReznichenkoWeb)'
+2025-12-05 23:53:35.695 +01:00 [INF] Route matched with {action = "GetAllWorkouts", controller = "Workouts"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[WorkoutDto]]] GetAllWorkouts() on controller WorkoutsController (ReznichenkoWeb).
+2025-12-05 23:53:35.700 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[WorkoutDto, ReznichenkoWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-12-05 23:53:35.700 +01:00 [INF] Executed action WorkoutsController.GetAllWorkouts (ReznichenkoWeb) in 4.8387ms
+2025-12-05 23:53:35.701 +01:00 [INF] Executed endpoint 'WorkoutsController.GetAllWorkouts (ReznichenkoWeb)'
+2025-12-05 23:53:35.702 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/api/workouts - 200 null application/json; charset=utf-8 8.6231ms
+2025-12-05 23:56:33.214 +01:00 [INF] Starting web host
+2025-12-05 23:56:33.263 +01:00 [INF] Now listening on: http://localhost:5122
+2025-12-05 23:56:33.265 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-05 23:56:33.265 +01:00 [INF] Hosting environment: Development
+2025-12-05 23:56:33.265 +01:00 [INF] Content root path: /Users/macbook/Downloads/ReznichenkoWeb-1/ReznichenkoWeb
+2025-12-05 23:56:33.788 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/swagger/index.html - null null
+2025-12-05 23:56:33.839 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/_framework/aspnetcore-browser-refresh.js - null null
+2025-12-05 23:56:33.839 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/_framework/aspnetcore-browser-refresh.js - 200 16459 application/javascript; charset=utf-8 0.8794ms
+2025-12-05 23:56:33.839 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/swagger/index.html - 200 null text/html;charset=utf-8 51.9083ms
+2025-12-05 23:56:34.036 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/swagger/v1/swagger.json - null null
+2025-12-05 23:56:34.071 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 35.1662ms
+2025-12-05 23:57:20.119 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/index.html - null null
+2025-12-05 23:57:20.145 +01:00 [WRN] Failed to determine the https port for redirect.
+2025-12-05 23:57:20.163 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/css/styles.css - null null
+2025-12-05 23:57:20.164 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/js/app.js - null null
+2025-12-05 23:57:20.165 +01:00 [INF] Sending file. Request path: '/index.html'. Physical path: '/Users/macbook/Downloads/ReznichenkoWeb-1/ReznichenkoWeb/wwwroot/index.html'
+2025-12-05 23:57:20.165 +01:00 [INF] Sending file. Request path: '/js/app.js'. Physical path: '/Users/macbook/Downloads/ReznichenkoWeb-1/ReznichenkoWeb/wwwroot/js/app.js'
+2025-12-05 23:57:20.165 +01:00 [INF] Sending file. Request path: '/css/styles.css'. Physical path: '/Users/macbook/Downloads/ReznichenkoWeb-1/ReznichenkoWeb/wwwroot/css/styles.css'
+2025-12-05 23:57:20.166 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/js/app.js - 200 10609 text/javascript 1.8967ms
+2025-12-05 23:57:20.166 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/index.html - 200 null text/html 47.057ms
+2025-12-05 23:57:20.166 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/css/styles.css - 200 2473 text/css 2.9057ms
+2025-12-05 23:57:20.207 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/_framework/aspnetcore-browser-refresh.js - null null
+2025-12-05 23:57:20.208 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/_framework/aspnetcore-browser-refresh.js - 200 16459 application/javascript; charset=utf-8 0.2197ms
+2025-12-05 23:57:20.255 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/api/members - null null
+2025-12-05 23:57:20.262 +01:00 [INF] Executing endpoint 'MembersController.GetAllMembers (ReznichenkoWeb)'
+2025-12-05 23:57:20.277 +01:00 [INF] Route matched with {action = "GetAllMembers", controller = "Members"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[MemberDto]]] GetAllMembers() on controller MembersController (ReznichenkoWeb).
+2025-12-05 23:57:20.517 +01:00 [INF] Getting all entities of type Member
+2025-12-05 23:57:20.685 +01:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT m."Id", m."Email", m."IsActive", m."JoinDate", m."MembershipType", m."Name", m."Phone"
+FROM "Members" AS m
+2025-12-05 23:57:20.719 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[MemberDto, ReznichenkoWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-12-05 23:57:20.725 +01:00 [INF] Executed action MembersController.GetAllMembers (ReznichenkoWeb) in 446.985ms
+2025-12-05 23:57:20.725 +01:00 [INF] Executed endpoint 'MembersController.GetAllMembers (ReznichenkoWeb)'
+2025-12-05 23:57:20.727 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/api/members - 200 null application/json; charset=utf-8 472.2395ms
+2025-12-05 23:57:28.502 +01:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5122/api/members/1 - null 0
+2025-12-05 23:57:28.504 +01:00 [INF] Executing endpoint 'MembersController.DeleteMember (ReznichenkoWeb)'
+2025-12-05 23:57:28.514 +01:00 [INF] Route matched with {action = "DeleteMember", controller = "Members"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] DeleteMember(Int32) on controller MembersController (ReznichenkoWeb).
+2025-12-05 23:57:28.550 +01:00 [INF] Getting entity of type Member with ID 1
+2025-12-05 23:57:28.602 +01:00 [INF] Executed DbCommand (5ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m."Id", m."Email", m."IsActive", m."JoinDate", m."MembershipType", m."Name", m."Phone"
+FROM "Members" AS m
+WHERE m."Id" = @__p_0
+LIMIT 1
+2025-12-05 23:57:28.603 +01:00 [INF] Deleting entity of type Member
+2025-12-05 23:57:28.631 +01:00 [INF] Executed DbCommand (3ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "Members"
+WHERE "Id" = @p0;
+2025-12-05 23:57:28.636 +01:00 [INF] Executing StatusCodeResult, setting HTTP status code 204
+2025-12-05 23:57:28.636 +01:00 [INF] Executed action MembersController.DeleteMember (ReznichenkoWeb) in 121.3181ms
+2025-12-05 23:57:28.636 +01:00 [INF] Executed endpoint 'MembersController.DeleteMember (ReznichenkoWeb)'
+2025-12-05 23:57:28.636 +01:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5122/api/members/1 - 204 null null 133.6753ms
+2025-12-05 23:57:28.639 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/api/members - null null
+2025-12-05 23:57:28.639 +01:00 [INF] Executing endpoint 'MembersController.GetAllMembers (ReznichenkoWeb)'
+2025-12-05 23:57:28.639 +01:00 [INF] Route matched with {action = "GetAllMembers", controller = "Members"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[MemberDto]]] GetAllMembers() on controller MembersController (ReznichenkoWeb).
+2025-12-05 23:57:28.644 +01:00 [INF] Getting all entities of type Member
+2025-12-05 23:57:28.645 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT m."Id", m."Email", m."IsActive", m."JoinDate", m."MembershipType", m."Name", m."Phone"
+FROM "Members" AS m
+2025-12-05 23:57:28.645 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[MemberDto, ReznichenkoWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-12-05 23:57:28.645 +01:00 [INF] Executed action MembersController.GetAllMembers (ReznichenkoWeb) in 6.0793ms
+2025-12-05 23:57:28.645 +01:00 [INF] Executed endpoint 'MembersController.GetAllMembers (ReznichenkoWeb)'
+2025-12-05 23:57:28.646 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/api/members - 200 null application/json; charset=utf-8 6.446ms
+2025-12-05 23:57:32.203 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/api/members/2 - null null
+2025-12-05 23:57:32.204 +01:00 [INF] Executing endpoint 'MembersController.GetMemberById (ReznichenkoWeb)'
+2025-12-05 23:57:32.209 +01:00 [INF] Route matched with {action = "GetMemberById", controller = "Members"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MemberDto]] GetMemberById(Int32) on controller MembersController (ReznichenkoWeb).
+2025-12-05 23:57:32.211 +01:00 [INF] Getting entity of type Member with ID 2
+2025-12-05 23:57:32.215 +01:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m."Id", m."Email", m."IsActive", m."JoinDate", m."MembershipType", m."Name", m."Phone"
+FROM "Members" AS m
+WHERE m."Id" = @__p_0
+LIMIT 1
+2025-12-05 23:57:32.216 +01:00 [INF] Executing OkObjectResult, writing value of type 'MemberDto'.
+2025-12-05 23:57:32.216 +01:00 [INF] Executed action MembersController.GetMemberById (ReznichenkoWeb) in 7.5738ms
+2025-12-05 23:57:32.216 +01:00 [INF] Executed endpoint 'MembersController.GetMemberById (ReznichenkoWeb)'
+2025-12-05 23:57:32.217 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/api/members/2 - 200 null application/json; charset=utf-8 13.4948ms
+2025-12-05 23:57:36.272 +01:00 [INF] Request starting HTTP/1.1 PUT http://localhost:5122/api/members/2 - application/json 124
+2025-12-05 23:57:36.274 +01:00 [INF] Executing endpoint 'MembersController.UpdateMember (ReznichenkoWeb)'
+2025-12-05 23:57:36.281 +01:00 [INF] Route matched with {action = "UpdateMember", controller = "Members"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MemberDto]] UpdateMember(Int32, UpdateMemberDto) on controller MembersController (ReznichenkoWeb).
+2025-12-05 23:57:36.304 +01:00 [INF] Getting entity of type Member with ID 2
+2025-12-05 23:57:36.308 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m."Id", m."Email", m."IsActive", m."JoinDate", m."MembershipType", m."Name", m."Phone"
+FROM "Members" AS m
+WHERE m."Id" = @__p_0
+LIMIT 1
+2025-12-05 23:57:36.311 +01:00 [INF] Updating entity of type Member
+2025-12-05 23:57:36.317 +01:00 [INF] Executed DbCommand (3ms) [Parameters=[@p6='?' (DbType = Int32), @p0='?', @p1='?' (DbType = Boolean), @p2='?' (DbType = DateTime), @p3='?', @p4='?', @p5='?'], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Members" SET "Email" = @p0, "IsActive" = @p1, "JoinDate" = @p2, "MembershipType" = @p3, "Name" = @p4, "Phone" = @p5
+WHERE "Id" = @p6;
+2025-12-05 23:57:36.318 +01:00 [INF] Executing OkObjectResult, writing value of type 'MemberDto'.
+2025-12-05 23:57:36.318 +01:00 [INF] Executed action MembersController.UpdateMember (ReznichenkoWeb) in 36.8393ms
+2025-12-05 23:57:36.318 +01:00 [INF] Executed endpoint 'MembersController.UpdateMember (ReznichenkoWeb)'
+2025-12-05 23:57:36.318 +01:00 [INF] Request finished HTTP/1.1 PUT http://localhost:5122/api/members/2 - 200 null application/json; charset=utf-8 46.3537ms
+2025-12-05 23:57:36.320 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/api/members - null null
+2025-12-05 23:57:36.320 +01:00 [INF] Executing endpoint 'MembersController.GetAllMembers (ReznichenkoWeb)'
+2025-12-05 23:57:36.320 +01:00 [INF] Route matched with {action = "GetAllMembers", controller = "Members"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[MemberDto]]] GetAllMembers() on controller MembersController (ReznichenkoWeb).
+2025-12-05 23:57:36.321 +01:00 [INF] Getting all entities of type Member
+2025-12-05 23:57:36.322 +01:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT m."Id", m."Email", m."IsActive", m."JoinDate", m."MembershipType", m."Name", m."Phone"
+FROM "Members" AS m
+2025-12-05 23:57:36.323 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[MemberDto, ReznichenkoWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-12-05 23:57:36.323 +01:00 [INF] Executed action MembersController.GetAllMembers (ReznichenkoWeb) in 2.911ms
+2025-12-05 23:57:36.323 +01:00 [INF] Executed endpoint 'MembersController.GetAllMembers (ReznichenkoWeb)'
+2025-12-05 23:57:36.324 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/api/members - 200 null application/json; charset=utf-8 3.4689ms
+2025-12-05 23:57:40.215 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/api/workouts - null null
+2025-12-05 23:57:40.216 +01:00 [INF] Executing endpoint 'WorkoutsController.GetAllWorkouts (ReznichenkoWeb)'
+2025-12-05 23:57:40.224 +01:00 [INF] Route matched with {action = "GetAllWorkouts", controller = "Workouts"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[WorkoutDto]]] GetAllWorkouts() on controller WorkoutsController (ReznichenkoWeb).
+2025-12-05 23:57:40.236 +01:00 [INF] Getting all entities of type Workout
+2025-12-05 23:57:40.244 +01:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."Description", w."DurationMinutes", w."Instructor", w."MaxParticipants", w."Name", w."ScheduledDateTime", w."WorkoutType"
+FROM "Workouts" AS w
+2025-12-05 23:57:40.245 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[WorkoutDto, ReznichenkoWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-12-05 23:57:40.246 +01:00 [INF] Executed action WorkoutsController.GetAllWorkouts (ReznichenkoWeb) in 21.6669ms
+2025-12-05 23:57:40.246 +01:00 [INF] Executed endpoint 'WorkoutsController.GetAllWorkouts (ReznichenkoWeb)'
+2025-12-05 23:57:40.246 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/api/workouts - 200 null application/json; charset=utf-8 30.5038ms
+2025-12-05 23:57:52.328 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/api/members - null null
+2025-12-05 23:57:52.332 +01:00 [INF] Executing endpoint 'MembersController.GetAllMembers (ReznichenkoWeb)'
+2025-12-05 23:57:52.332 +01:00 [INF] Route matched with {action = "GetAllMembers", controller = "Members"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[MemberDto]]] GetAllMembers() on controller MembersController (ReznichenkoWeb).
+2025-12-05 23:57:52.337 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[MemberDto, ReznichenkoWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-12-05 23:57:52.337 +01:00 [INF] Executed action MembersController.GetAllMembers (ReznichenkoWeb) in 4.8805ms
+2025-12-05 23:57:52.338 +01:00 [INF] Executed endpoint 'MembersController.GetAllMembers (ReznichenkoWeb)'
+2025-12-05 23:57:52.340 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/api/members - 200 null application/json; charset=utf-8 9.9488ms
+2025-12-05 23:57:54.813 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/api/members/3 - null null
+2025-12-05 23:57:54.813 +01:00 [INF] Executing endpoint 'MembersController.GetMemberById (ReznichenkoWeb)'
+2025-12-05 23:57:54.814 +01:00 [INF] Route matched with {action = "GetMemberById", controller = "Members"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MemberDto]] GetMemberById(Int32) on controller MembersController (ReznichenkoWeb).
+2025-12-05 23:57:54.816 +01:00 [INF] Getting entity of type Member with ID 3
+2025-12-05 23:57:54.819 +01:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m."Id", m."Email", m."IsActive", m."JoinDate", m."MembershipType", m."Name", m."Phone"
+FROM "Members" AS m
+WHERE m."Id" = @__p_0
+LIMIT 1
+2025-12-05 23:57:54.820 +01:00 [INF] Executing OkObjectResult, writing value of type 'MemberDto'.
+2025-12-05 23:57:54.821 +01:00 [INF] Executed action MembersController.GetMemberById (ReznichenkoWeb) in 7.0773ms
+2025-12-05 23:57:54.821 +01:00 [INF] Executed endpoint 'MembersController.GetMemberById (ReznichenkoWeb)'
+2025-12-05 23:57:54.821 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/api/members/3 - 200 null application/json; charset=utf-8 8.2965ms
+2025-12-05 23:58:14.487 +01:00 [INF] Request starting HTTP/1.1 PUT http://localhost:5122/api/members/3 - application/json 112
+2025-12-05 23:58:14.491 +01:00 [INF] Executing endpoint 'MembersController.UpdateMember (ReznichenkoWeb)'
+2025-12-05 23:58:14.491 +01:00 [INF] Route matched with {action = "UpdateMember", controller = "Members"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MemberDto]] UpdateMember(Int32, UpdateMemberDto) on controller MembersController (ReznichenkoWeb).
+2025-12-05 23:58:14.501 +01:00 [INF] Getting entity of type Member with ID 3
+2025-12-05 23:58:14.509 +01:00 [INF] Executed DbCommand (4ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m."Id", m."Email", m."IsActive", m."JoinDate", m."MembershipType", m."Name", m."Phone"
+FROM "Members" AS m
+WHERE m."Id" = @__p_0
+LIMIT 1
+2025-12-05 23:58:14.510 +01:00 [INF] Updating entity of type Member
+2025-12-05 23:58:14.514 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[@p6='?' (DbType = Int32), @p0='?', @p1='?' (DbType = Boolean), @p2='?' (DbType = DateTime), @p3='?', @p4='?', @p5='?'], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Members" SET "Email" = @p0, "IsActive" = @p1, "JoinDate" = @p2, "MembershipType" = @p3, "Name" = @p4, "Phone" = @p5
+WHERE "Id" = @p6;
+2025-12-05 23:58:14.514 +01:00 [INF] Executing OkObjectResult, writing value of type 'MemberDto'.
+2025-12-05 23:58:14.514 +01:00 [INF] Executed action MembersController.UpdateMember (ReznichenkoWeb) in 23.1661ms
+2025-12-05 23:58:14.515 +01:00 [INF] Executed endpoint 'MembersController.UpdateMember (ReznichenkoWeb)'
+2025-12-05 23:58:14.515 +01:00 [INF] Request finished HTTP/1.1 PUT http://localhost:5122/api/members/3 - 200 null application/json; charset=utf-8 28.3844ms
+2025-12-05 23:58:14.518 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/api/members - null null
+2025-12-05 23:58:14.519 +01:00 [INF] Executing endpoint 'MembersController.GetAllMembers (ReznichenkoWeb)'
+2025-12-05 23:58:14.519 +01:00 [INF] Route matched with {action = "GetAllMembers", controller = "Members"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[MemberDto]]] GetAllMembers() on controller MembersController (ReznichenkoWeb).
+2025-12-05 23:58:14.520 +01:00 [INF] Getting all entities of type Member
+2025-12-05 23:58:14.521 +01:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT m."Id", m."Email", m."IsActive", m."JoinDate", m."MembershipType", m."Name", m."Phone"
+FROM "Members" AS m
+2025-12-05 23:58:14.522 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[MemberDto, ReznichenkoWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-12-05 23:58:14.522 +01:00 [INF] Executed action MembersController.GetAllMembers (ReznichenkoWeb) in 3.4607ms
+2025-12-05 23:58:14.522 +01:00 [INF] Executed endpoint 'MembersController.GetAllMembers (ReznichenkoWeb)'
+2025-12-05 23:58:14.523 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/api/members - 200 null application/json; charset=utf-8 4.3639ms
+2025-12-05 23:58:20.221 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5122/api/workouts - null null
+2025-12-05 23:58:20.222 +01:00 [INF] Executing endpoint 'WorkoutsController.GetAllWorkouts (ReznichenkoWeb)'
+2025-12-05 23:58:20.222 +01:00 [INF] Route matched with {action = "GetAllWorkouts", controller = "Workouts"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[WorkoutDto]]] GetAllWorkouts() on controller WorkoutsController (ReznichenkoWeb).
+2025-12-05 23:58:20.228 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[WorkoutDto, ReznichenkoWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-12-05 23:58:20.228 +01:00 [INF] Executed action WorkoutsController.GetAllWorkouts (ReznichenkoWeb) in 5.9305ms
+2025-12-05 23:58:20.228 +01:00 [INF] Executed endpoint 'WorkoutsController.GetAllWorkouts (ReznichenkoWeb)'
+2025-12-05 23:58:20.228 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5122/api/workouts - 200 null application/json; charset=utf-8 6.8905ms
