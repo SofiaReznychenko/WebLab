@@ -1,0 +1,25 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "name": "Кардіо тренування",
+      "description": "Інтенсивне кардіо тренування для спалювання жиру",
+      "durationMinutes": 45,
+      "instructor": "Андрій Коваль",
+      "maxParticipants": 15,
+      "scheduledDateTime": "2025-09-14T18:00:00+03:00",
+      "workoutType": "Кардіо"
+    },
+    {
+      "id": 2,
+      "name": "Силові вправи",
+      "description": "Тренування з вагами для розвитку м'язової маси",
+      "durationMinutes": 60,
+      "instructor": "Ольга Сидоренко",
+      "maxParticipants": 10,
+      "scheduledDateTime": "2025-09-15T16:00:00+03:00",
+      "workoutType": "Силові"
+    }
+  ],
+  "nextId": 3
+}

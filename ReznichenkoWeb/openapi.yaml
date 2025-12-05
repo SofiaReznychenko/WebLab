@@ -1,0 +1,255 @@
+openapi: 3.0.0
+info:
+  title: Спортивний зал API
+  description: REST API для управління членами спортивного залу та тренуваннями
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+servers:
+  - url: http://localhost:5122
+    description: Local Development Server
+paths:
+  /api/Members:
+    get:
+      summary: Отримати список всіх членів залу
+      tags:
+        - Members
+      responses:
+        '200':
+          description: Успішна операція
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Member'
+    post:
+      summary: Додати нового члена залу
+      tags:
+        - Members
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Member'
+      responses:
+        '201':
+          description: Член створений
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+        '400':
+          description: Невірний запит
+    delete:
+      summary: Видалити всіх членів залу
+      tags:
+        - Members
+      responses:
+        '204':
+          description: Всі члени видалені
+  /api/Members/{id}:
+    get:
+      summary: Отримати члена за ідентифікатором
+      tags:
+        - Members
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Член знайдений
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+        '404':
+          description: Член не знайдений
+    put:
+      summary: Оновити існуючого члена залу
+      tags:
+        - Members
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Member'
+      responses:
+        '200':
+          description: Член оновлений
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+        '404':
+          description: Член не знайдений
+    delete:
+      summary: Видалити члена за ідентифікатором
+      tags:
+        - Members
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Член видалений
+        '404':
+          description: Член не знайдений
+
+  /api/Workouts:
+    get:
+      summary: Отримати список всіх тренувань
+      tags:
+        - Workouts
+      responses:
+        '200':
+          description: Успішна операція
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Workout'
+    post:
+      summary: Додати нове тренування
+      tags:
+        - Workouts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Workout'
+      responses:
+        '201':
+          description: Тренування створено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workout'
+        '400':
+          description: Невірний запит
+    delete:
+      summary: Видалити всі тренування
+      tags:
+        - Workouts
+      responses:
+        '204':
+          description: Всі тренування видалені
+  /api/Workouts/{id}:
+    get:
+      summary: Отримати тренування за ідентифікатором
+      tags:
+        - Workouts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Тренування знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workout'
+        '404':
+          description: Тренування не знайдено
+    put:
+      summary: Оновити існуюче тренування
+      tags:
+        - Workouts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Workout'
+      responses:
+        '200':
+          description: Тренування оновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workout'
+        '404':
+          description: Тренування не знайдено
+    delete:
+      summary: Видалити тренування за ідентифікатором
+      tags:
+        - Workouts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Тренування видалено
+        '404':
+          description: Тренування не знайдено
+
+components:
+  schemas:
+    Member:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        joinDate:
+          type: string
+          format: date-time
+        membershipType:
+          type: string
+        isActive:
+          type: boolean
+    Workout:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        durationMinutes:
+          type: integer
+        instructor:
+          type: string
+        maxParticipants:
+          type: integer
+        scheduledDateTime:
+          type: string
+          format: date-time
+        workoutType:
+          type: string

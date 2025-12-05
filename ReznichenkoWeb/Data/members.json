@@ -1,0 +1,41 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "name": "Олександр Іваненко",
+      "email": "oleksandr@example.com",
+      "phone": "+380501234567",
+      "joinDate": "2025-08-15T12:35:42.564997+02:00",
+      "membershipType": "Преміум",
+      "isActive": true
+    },
+    {
+      "id": 2,
+      "name": "Марія Петренко",
+      "email": "maria@example.com",
+      "phone": "+380507654321",
+      "joinDate": "2025-08-30T12:35:42.597099+02:00",
+      "membershipType": "Стандарт",
+      "isActive": true
+    },
+    {
+      "id": 3,
+      "name": "Sofia",
+      "email": "user@example.com",
+      "phone": "+1234567890123",
+      "joinDate": "2025-09-14T12:35:42.617124+02:00",
+      "membershipType": "Standart",
+      "isActive": true
+    },
+    {
+      "id": 4,
+      "name": "123",
+      "email": "user@example.com",
+      "phone": "0951233223",
+      "joinDate": "2025-12-05T20:57:30.95703+01:00",
+      "membershipType": "string",
+      "isActive": true
+    }
+  ],
+  "nextId": 5
+}
