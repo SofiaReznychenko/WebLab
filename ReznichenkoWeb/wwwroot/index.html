@@ -15,8 +15,10 @@
         <div class="tabs">
             <button class="tab-button active" data-target="members">Члени залу</button>
             <button class="tab-button" data-target="workouts">Тренування</button>
+            <button class="tab-button" data-target="trainers">Тренери</button>
         </div>
 
+        <!-- MEMBERS TAB -->
         <div id="members" class="tab-content active">
             <h2>Список членів</h2>
 
@@ -34,7 +36,19 @@
                     </div>
                     <div class="form-group">
                         <label>Телефон:</label>
-                        <input type="tel" name="phone" required>
+                        <input type="tel" name="phone" required placeholder="+380...">
+                    </div>
+                    <div class="form-group">
+                        <label>Вік:</label>
+                        <input type="number" name="age" min="1" max="120" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Стать:</label>
+                        <select name="gender" required>
+                            <option value="">Оберіть...</option>
+                            <option value="Чоловіча">Чоловіча</option>
+                            <option value="Жіноча">Жіноча</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label>Тип абонементу:</label>
@@ -54,6 +68,8 @@
                     <tr>
                         <th>ID</th>
                         <th>Ім'я</th>
+                        <th>Age</th>
+                        <th>Gender</th>
                         <th>Email</th>
                         <th>Телефон</th>
                         <th>Абонемент</th>
@@ -68,6 +84,7 @@
             </table>
         </div>
 
+        <!-- WORKOUTS TAB -->
         <div id="workouts" class="tab-content">
             <h2>Розклад тренувань</h2>
 
@@ -129,6 +146,69 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- TRAINERS TAB -->
+        <div id="trainers" class="tab-content">
+            <h2>Список тренерів</h2>
+
+            <div class="form-section">
+                <h3>Додати тренера</h3>
+                <form id="addTrainerForm">
+                    <div class="form-group">
+                        <label>Ім'я:</label>
+                        <input type="text" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Вік:</label>
+                        <input type="number" name="age" min="18" max="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Стать:</label>
+                        <select name="gender" required>
+                            <option value="">Оберіть...</option>
+                            <option value="Чоловіча">Чоловіча</option>
+                            <option value="Жіноча">Жіноча</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Досвід (років):</label>
+                        <input type="number" name="experience" min="0" max="50" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Спеціалізація:</label>
+                        <input type="text" name="specialization">
+                    </div>
+                    <div class="form-group">
+                        <label>Телефон:</label>
+                        <input type="tel" name="phone" required placeholder="+380...">
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <button type="submit" class="primary">Додати тренера</button>
+                    <div id="trainerError" class="error-message"></div>
+                </form>
+            </div>
+
+            <table id="trainersTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Ім'я</th>
+                        <th>Вік</th>
+                        <th>Стать</th>
+                        <th>Досвід</th>
+                        <th>Спеціалізація</th>
+                        <th>Контакти</th>
+                        <th>Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Populated by JS -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Edit Member Modal -->
@@ -148,7 +228,18 @@
                 </div>
                 <div class="form-group">
                     <label>Телефон:</label>
-                    <input type="tel" name="phone" required>
+                    <input type="tel" name="phone" required placeholder="+380...">
+                </div>
+                <div class="form-group">
+                    <label>Вік:</label>
+                    <input type="number" name="age" min="1" max="120" required>
+                </div>
+                <div class="form-group">
+                    <label>Стать:</label>
+                    <select name="gender" required>
+                        <option value="Чоловіча">Чоловіча</option>
+                        <option value="Жіноча">Жіноча</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Тип абонементу:</label>
@@ -205,6 +296,49 @@
                         <option value="Кардіо">Кардіо</option>
                         <option value="Йога">Йога</option>
                     </select>
+                </div>
+                <button type="submit" class="primary">Зберегти зміни</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Trainer Modal -->
+    <div id="editTrainerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('editTrainerModal')">&times;</span>
+            <h2>Редагування тренера</h2>
+            <form id="editTrainerForm">
+                <input type="hidden" name="id">
+                <div class="form-group">
+                    <label>Ім'я:</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label>Вік:</label>
+                    <input type="number" name="age" min="18" max="100" required>
+                </div>
+                <div class="form-group">
+                    <label>Стать:</label>
+                    <select name="gender" required>
+                        <option value="Чоловіча">Чоловіча</option>
+                        <option value="Жіноча">Жіноча</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Досвід (років):</label>
+                    <input type="number" name="experience" min="0" max="50" required>
+                </div>
+                <div class="form-group">
+                    <label>Спеціалізація:</label>
+                    <input type="text" name="specialization">
+                </div>
+                <div class="form-group">
+                    <label>Телефон:</label>
+                    <input type="tel" name="phone" required placeholder="+380...">
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" name="email" required>
                 </div>
                 <button type="submit" class="primary">Зберегти зміни</button>
             </form>

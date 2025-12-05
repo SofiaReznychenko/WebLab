@@ -42,12 +42,15 @@ builder.Services.AddMemoryCache();
 // Register Repositories
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 builder.Services.AddScoped<IWorkoutRepository, WorkoutRepository>();
+builder.Services.AddScoped<ITrainerRepository, TrainerRepository>();
 
 // Register Validators
 builder.Services.AddScoped<IValidator<CreateMemberDto>, CreateMemberDtoValidator>();
 builder.Services.AddScoped<IValidator<UpdateMemberDto>, UpdateMemberDtoValidator>();
 builder.Services.AddScoped<IValidator<CreateWorkoutDto>, CreateWorkoutDtoValidator>();
 builder.Services.AddScoped<IValidator<UpdateWorkoutDto>, UpdateWorkoutDtoValidator>();
+builder.Services.AddScoped<IValidator<CreateTrainerDto>, CreateTrainerDtoValidator>();
+builder.Services.AddScoped<IValidator<UpdateTrainerDto>, UpdateTrainerDtoValidator>();
 
 var app = builder.Build();
 

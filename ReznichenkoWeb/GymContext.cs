@@ -6,4 +6,5 @@ public class GymContext : DbContext
 
     public DbSet<Member> Members { get; set; }
     public DbSet<Workout> Workouts { get; set; }
+    public DbSet<Trainer> Trainers { get; set; }
 }

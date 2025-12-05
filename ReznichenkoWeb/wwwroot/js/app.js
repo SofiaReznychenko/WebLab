@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (target === 'members') loadMembers();
             if (target === 'workouts') loadWorkouts();
+            if (target === 'trainers') loadTrainers();
         });
     });
 
@@ -23,8 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Form submissions
     document.getElementById('addMemberForm').addEventListener('submit', handleAddMember);
     document.getElementById('addWorkoutForm').addEventListener('submit', handleAddWorkout);
+    document.getElementById('addTrainerForm').addEventListener('submit', handleAddTrainer);
+
     document.getElementById('editMemberForm').addEventListener('submit', handleEditMember);
     document.getElementById('editWorkoutForm').addEventListener('submit', handleEditWorkout);
+    document.getElementById('editTrainerForm').addEventListener('submit', handleEditTrainer);
 
     // Close modals on outside click
     window.onclick = function (event) {
@@ -36,6 +40,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function closeModal(modalId) {
     document.getElementById(modalId).style.display = "none";
+}
+
+function handleError(error, errorElement) {
+    try {
+        const errorObj = JSON.parse(error.message);
+        if (Array.isArray(errorObj)) {
+            errorElement.textContent = errorObj.map(e => `${e.propertyName}: ${e.errorMessage}`).join(', ');
+        } else {
+            errorElement.textContent = error.message;
+        }
+    } catch {
+        errorElement.textContent = error.message;
+    }
 }
 
 // --- MEMBERS ---
@@ -53,6 +70,8 @@ async function loadMembers() {
             tr.innerHTML = `
                 <td>${member.id}</td>
                 <td>${member.name}</td>
+                <td>${member.age}</td>
+                <td>${member.gender}</td>
                 <td>${member.email}</td>
                 <td>${member.phone}</td>
                 <td>${member.membershipType}</td>
@@ -80,7 +99,9 @@ async function handleAddMember(e) {
         name: form.name.value,
         email: form.email.value,
         phone: form.phone.value,
-        membershipType: form.membershipType.value
+        membershipType: form.membershipType.value,
+        age: parseInt(form.age.value),
+        gender: form.gender.value
     };
 
     try {
@@ -131,6 +152,8 @@ async function openEditMember(id) {
         form.email.value = member.email;
         form.phone.value = member.phone;
         form.membershipType.value = member.membershipType;
+        form.age.value = member.age;
+        form.gender.value = member.gender;
         form.isActive.checked = member.isActive;
 
         document.getElementById('editMemberModal').style.display = "block";
@@ -151,6 +174,8 @@ async function handleEditMember(e) {
         email: form.email.value,
         phone: form.phone.value,
         membershipType: form.membershipType.value,
+        age: parseInt(form.age.value),
+        gender: form.gender.value,
         isActive: form.isActive.checked
     };
 
@@ -269,7 +294,6 @@ async function openEditWorkout(id) {
         form.description.value = workout.description;
         form.durationMinutes.value = workout.durationMinutes;
         form.maxParticipants.value = workout.maxParticipants;
-        // Format date for datetime-local input
         form.scheduledDateTime.value = new Date(workout.scheduledDateTime).toISOString().slice(0, 16);
         form.workoutType.value = workout.workoutType;
 
@@ -315,15 +339,144 @@ async function handleEditWorkout(e) {
     }
 }
 
-function handleError(error, errorElement) {
+// --- TRAINERS ---
+
+async function loadTrainers() {
     try {
-        const errorObj = JSON.parse(error.message);
-        if (Array.isArray(errorObj)) {
-            errorElement.textContent = errorObj.map(e => `${e.propertyName}: ${e.errorMessage}`).join(', ');
-        } else {
-            errorElement.textContent = error.message;
+        const response = await fetch(`${API_BASE_URL}/trainers`);
+        const trainers = await response.json();
+
+        const tbody = document.querySelector('#trainersTable tbody');
+        tbody.innerHTML = '';
+
+        trainers.forEach(trainer => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${trainer.id}</td>
+                <td>${trainer.name}</td>
+                <td>${trainer.age}</td>
+                <td>${trainer.gender}</td>
+                <td>${trainer.experience} р.</td>
+                <td>${trainer.specialization || '-'}</td>
+                <td>${trainer.phone}<br>${trainer.email}</td>
+                <td>
+                    <button class="btn-sm btn-edit" onclick="openEditTrainer(${trainer.id})">Ред.</button>
+                    <button class="btn-sm btn-delete" onclick="deleteTrainer(${trainer.id})">Вид.</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch (error) {
+        console.error('Error loading trainers:', error);
+    }
+}
+
+async function handleAddTrainer(e) {
+    e.preventDefault();
+    const form = e.target;
+    const errorDiv = document.getElementById('trainerError');
+    errorDiv.textContent = '';
+
+    const trainerData = {
+        name: form.name.value,
+        age: parseInt(form.age.value),
+        gender: form.gender.value,
+        experience: parseInt(form.experience.value),
+        specialization: form.specialization.value,
+        phone: form.phone.value,
+        email: form.email.value
+    };
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/trainers`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(trainerData)
+        });
+
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(error);
         }
-    } catch {
-        errorElement.textContent = error.message;
+
+        form.reset();
+        loadTrainers();
+    } catch (error) {
+        handleError(error, errorDiv);
+    }
+}
+
+async function deleteTrainer(id) {
+    if (!confirm('Ви впевнені, що хочете видалити цього тренера?')) return;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/trainers/${id}`, {
+            method: 'DELETE'
+        });
+        if (response.ok) {
+            loadTrainers();
+        } else {
+            alert('Помилка видалення');
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Помилка видалення');
+    }
+}
+
+async function openEditTrainer(id) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/trainers/${id}`);
+        const trainer = await response.json();
+
+        const form = document.getElementById('editTrainerForm');
+        form.id.value = trainer.id;
+        form.name.value = trainer.name;
+        form.age.value = trainer.age;
+        form.gender.value = trainer.gender;
+        form.experience.value = trainer.experience;
+        form.specialization.value = trainer.specialization;
+        form.phone.value = trainer.phone;
+        form.email.value = trainer.email;
+
+        document.getElementById('editTrainerModal').style.display = "block";
+    } catch (error) {
+        console.error(error);
+        alert('Не вдалося завантажити дані');
+    }
+}
+
+async function handleEditTrainer(e) {
+    e.preventDefault();
+    const form = e.target;
+    const id = form.id.value;
+
+    const trainerData = {
+        id: parseInt(id),
+        name: form.name.value,
+        age: parseInt(form.age.value),
+        gender: form.gender.value,
+        experience: parseInt(form.experience.value),
+        specialization: form.specialization.value,
+        phone: form.phone.value,
+        email: form.email.value
+    };
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/trainers/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(trainerData)
+        });
+
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(error);
+        }
+
+        closeModal('editTrainerModal');
+        loadTrainers();
+    } catch (error) {
+        alert('Помилка оновлення: ' + error.message);
     }
 }

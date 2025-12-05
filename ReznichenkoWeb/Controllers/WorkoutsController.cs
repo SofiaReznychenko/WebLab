@@ -86,7 +86,7 @@ public class WorkoutsController : ControllerBase
             DurationMinutes = createWorkoutDto.DurationMinutes,
             Instructor = createWorkoutDto.Instructor,
             MaxParticipants = createWorkoutDto.MaxParticipants,
-            ScheduledDateTime = createWorkoutDto.ScheduledDateTime,
+            ScheduledDateTime = createWorkoutDto.ScheduledDateTime.ToUniversalTime(),
             WorkoutType = createWorkoutDto.WorkoutType
         };
 
@@ -124,7 +124,7 @@ public class WorkoutsController : ControllerBase
         workout.DurationMinutes = updateWorkoutDto.DurationMinutes;
         workout.Instructor = updateWorkoutDto.Instructor;
         workout.MaxParticipants = updateWorkoutDto.MaxParticipants;
-        workout.ScheduledDateTime = updateWorkoutDto.ScheduledDateTime;
+        workout.ScheduledDateTime = updateWorkoutDto.ScheduledDateTime.ToUniversalTime();
         workout.WorkoutType = updateWorkoutDto.WorkoutType;
 
         await _workoutRepository.UpdateAsync(workout);

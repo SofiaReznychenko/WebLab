@@ -42,7 +42,9 @@ public class MembersController : ControllerBase
                 Phone = m.Phone,
                 JoinDate = m.JoinDate,
                 MembershipType = m.MembershipType,
-                IsActive = m.IsActive
+                IsActive = m.IsActive,
+                Age = m.Age,
+                Gender = m.Gender
             }).ToList();
 
             var cacheOptions = new MemoryCacheEntryOptions()
@@ -69,7 +71,9 @@ public class MembersController : ControllerBase
             Phone = member.Phone,
             JoinDate = member.JoinDate,
             MembershipType = member.MembershipType,
-            IsActive = member.IsActive
+            IsActive = member.IsActive,
+            Age = member.Age,
+            Gender = member.Gender
         };
         return Ok(memberDto);
     }
@@ -93,7 +97,9 @@ public class MembersController : ControllerBase
             Phone = createMemberDto.Phone,
             MembershipType = createMemberDto.MembershipType,
             JoinDate = DateTime.UtcNow,
-            IsActive = true
+            IsActive = true,
+            Age = createMemberDto.Age,
+            Gender = createMemberDto.Gender
         };
 
         await _memberRepository.AddAsync(member);
@@ -107,7 +113,9 @@ public class MembersController : ControllerBase
             Phone = member.Phone,
             JoinDate = member.JoinDate,
             MembershipType = member.MembershipType,
-            IsActive = member.IsActive
+            IsActive = member.IsActive,
+            Age = member.Age,
+            Gender = member.Gender
         };
 
         return CreatedAtAction(nameof(GetMemberById), new { id = memberDto.Id }, memberDto);
@@ -129,6 +137,8 @@ public class MembersController : ControllerBase
         member.Phone = updateMemberDto.Phone;
         member.MembershipType = updateMemberDto.MembershipType;
         member.IsActive = updateMemberDto.IsActive;
+        member.Age = updateMemberDto.Age;
+        member.Gender = updateMemberDto.Gender;
 
         await _memberRepository.UpdateAsync(member);
         _cache.Remove(MEMBERS_CACHE_KEY);
@@ -141,7 +151,9 @@ public class MembersController : ControllerBase
             Phone = member.Phone,
             JoinDate = member.JoinDate,
             MembershipType = member.MembershipType,
-            IsActive = member.IsActive
+            IsActive = member.IsActive,
+            Age = member.Age,
+            Gender = member.Gender
         };
 
         return Ok(memberDto);
