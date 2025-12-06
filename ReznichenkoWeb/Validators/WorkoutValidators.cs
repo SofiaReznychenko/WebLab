@@ -1,4 +1,7 @@
 using FluentValidation;
+using ReznichenkoWeb.DTOs;
+
+namespace ReznichenkoWeb.Validators;
 
 public class CreateWorkoutDtoValidator : AbstractValidator<CreateWorkoutDto>
 {

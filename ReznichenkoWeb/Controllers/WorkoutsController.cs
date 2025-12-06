@@ -1,36 +1,23 @@
 using Microsoft.AspNetCore.Mvc;
-using FluentValidation;
-using Microsoft.Extensions.Caching.Memory;
+using ReznichenkoWeb.ViewModels;
+using ReznichenkoWeb.Models;
+using ReznichenkoWeb.Repositories;
 
-[ApiController]
-[Route("api/[controller]")]
-public class WorkoutsController : ControllerBase
+namespace ReznichenkoWeb.Controllers
 {
-    private readonly IWorkoutRepository _workoutRepository;
-    private readonly IValidator<CreateWorkoutDto> _createWorkoutValidator;
-    private readonly IValidator<UpdateWorkoutDto> _updateWorkoutValidator;
-    private readonly IMemoryCache _cache;
-    private const string WORKOUTS_CACHE_KEY = "workouts_all";
-
-    public WorkoutsController(
-        IWorkoutRepository workoutRepository,
-        IValidator<CreateWorkoutDto> createWorkoutValidator,
-        IValidator<UpdateWorkoutDto> updateWorkoutValidator,
-        IMemoryCache cache)
+    public class WorkoutsController : Controller
     {
-        _workoutRepository = workoutRepository;
-        _createWorkoutValidator = createWorkoutValidator;
-        _updateWorkoutValidator = updateWorkoutValidator;
-        _cache = cache;
-    }
+        private readonly IWorkoutRepository _workoutRepository;
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<WorkoutDto>>> GetAllWorkouts()
-    {
-        if (!_cache.TryGetValue(WORKOUTS_CACHE_KEY, out IEnumerable<WorkoutDto> workoutDtos))
+        public WorkoutsController(IWorkoutRepository workoutRepository)
+        {
+            _workoutRepository = workoutRepository;
+        }
+
+        public async Task<IActionResult> Index()
         {
             var workouts = await _workoutRepository.GetAllAsync();
-            workoutDtos = workouts.Select(w => new WorkoutDto
+            var viewModels = workouts.Select(w => new WorkoutViewModel
             {
                 Id = w.Id,
                 Name = w.Name,
@@ -42,118 +29,92 @@ public class WorkoutsController : ControllerBase
                 WorkoutType = w.WorkoutType
             }).ToList();
 
-            var cacheOptions = new MemoryCacheEntryOptions()
-                .SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
-
-            _cache.Set(WORKOUTS_CACHE_KEY, workoutDtos, cacheOptions);
+            return View(viewModels);
         }
 
-        return Ok(workoutDtos);
-    }
-
-    [HttpGet("{id}")]
-    public async Task<ActionResult<WorkoutDto>> GetWorkoutById(int id)
-    {
-        var workout = await _workoutRepository.GetByIdAsync(id);
-        if (workout == null)
-            return NotFound($"Тренування з ID {id} не знайдено");
-
-        var workoutDto = new WorkoutDto
+        public IActionResult Create()
         {
-            Id = workout.Id,
-            Name = workout.Name,
-            Description = workout.Description,
-            DurationMinutes = workout.DurationMinutes,
-            Instructor = workout.Instructor,
-            MaxParticipants = workout.MaxParticipants,
-            ScheduledDateTime = workout.ScheduledDateTime,
-            WorkoutType = workout.WorkoutType
-        };
-        return Ok(workoutDto);
-    }
+            return View();
+        }
 
-    [HttpPost]
-    public async Task<ActionResult<WorkoutDto>> CreateWorkout([FromBody] CreateWorkoutDto createWorkoutDto)
-    {
-        var validationResult = await _createWorkoutValidator.ValidateAsync(createWorkoutDto);
-        if (!validationResult.IsValid)
-            return BadRequest(validationResult.Errors);
-
-        var workout = new Workout
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(WorkoutViewModel model)
         {
-            Name = createWorkoutDto.Name,
-            Description = createWorkoutDto.Description,
-            DurationMinutes = createWorkoutDto.DurationMinutes,
-            Instructor = createWorkoutDto.Instructor,
-            MaxParticipants = createWorkoutDto.MaxParticipants,
-            ScheduledDateTime = createWorkoutDto.ScheduledDateTime.ToUniversalTime(),
-            WorkoutType = createWorkoutDto.WorkoutType
-        };
+            if (ModelState.IsValid)
+            {
+                var workout = new Workout
+                {
+                    Name = model.Name,
+                    Description = model.Description,
+                    DurationMinutes = model.DurationMinutes,
+                    Instructor = model.Instructor,
+                    MaxParticipants = model.MaxParticipants,
+                    ScheduledDateTime = model.ScheduledDateTime.ToUniversalTime(),
+                    WorkoutType = model.WorkoutType
+                };
 
-        await _workoutRepository.AddAsync(workout);
-        _cache.Remove(WORKOUTS_CACHE_KEY);
+                await _workoutRepository.AddAsync(workout);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
 
-        var workoutDto = new WorkoutDto
+        public async Task<IActionResult> Edit(int id)
         {
-            Id = workout.Id,
-            Name = workout.Name,
-            Description = workout.Description,
-            DurationMinutes = workout.DurationMinutes,
-            Instructor = workout.Instructor,
-            MaxParticipants = workout.MaxParticipants,
-            ScheduledDateTime = workout.ScheduledDateTime,
-            WorkoutType = workout.WorkoutType
-        };
+            var workout = await _workoutRepository.GetByIdAsync(id);
+            if (workout == null) return NotFound();
 
-        return CreatedAtAction(nameof(GetWorkoutById), new { id = workoutDto.Id }, workoutDto);
-    }
+            var model = new WorkoutViewModel
+            {
+                Id = workout.Id,
+                Name = workout.Name,
+                Description = workout.Description,
+                DurationMinutes = workout.DurationMinutes,
+                Instructor = workout.Instructor,
+                MaxParticipants = workout.MaxParticipants,
+                ScheduledDateTime = workout.ScheduledDateTime,
+                WorkoutType = workout.WorkoutType
+            };
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult<WorkoutDto>> UpdateWorkout(int id, [FromBody] UpdateWorkoutDto updateWorkoutDto)
-    {
-        var validationResult = await _updateWorkoutValidator.ValidateAsync(updateWorkoutDto);
-        if (!validationResult.IsValid)
-            return BadRequest(validationResult.Errors);
+            return View(model);
+        }
 
-        var workout = await _workoutRepository.GetByIdAsync(id);
-        if (workout == null)
-            return NotFound($"Тренування з ID {id} не знайдено");
-
-        workout.Name = updateWorkoutDto.Name;
-        workout.Description = updateWorkoutDto.Description;
-        workout.DurationMinutes = updateWorkoutDto.DurationMinutes;
-        workout.Instructor = updateWorkoutDto.Instructor;
-        workout.MaxParticipants = updateWorkoutDto.MaxParticipants;
-        workout.ScheduledDateTime = updateWorkoutDto.ScheduledDateTime.ToUniversalTime();
-        workout.WorkoutType = updateWorkoutDto.WorkoutType;
-
-        await _workoutRepository.UpdateAsync(workout);
-        _cache.Remove(WORKOUTS_CACHE_KEY);
-
-        var workoutDto = new WorkoutDto
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, WorkoutViewModel model)
         {
-            Id = workout.Id,
-            Name = workout.Name,
-            Description = workout.Description,
-            DurationMinutes = workout.DurationMinutes,
-            Instructor = workout.Instructor,
-            MaxParticipants = workout.MaxParticipants,
-            ScheduledDateTime = workout.ScheduledDateTime,
-            WorkoutType = workout.WorkoutType
-        };
+            if (id != model.Id) return NotFound();
 
-        return Ok(workoutDto);
-    }
+            if (ModelState.IsValid)
+            {
+                var workout = await _workoutRepository.GetByIdAsync(id);
+                if (workout == null) return NotFound();
 
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteWorkout(int id)
-    {
-        var workout = await _workoutRepository.GetByIdAsync(id);
-        if (workout == null)
-            return NotFound($"Тренування з ID {id} не знайдено");
+                workout.Name = model.Name;
+                workout.Description = model.Description;
+                workout.DurationMinutes = model.DurationMinutes;
+                workout.Instructor = model.Instructor;
+                workout.MaxParticipants = model.MaxParticipants;
+                workout.ScheduledDateTime = model.ScheduledDateTime.ToUniversalTime();
+                workout.WorkoutType = model.WorkoutType;
 
-        await _workoutRepository.DeleteAsync(workout);
-        _cache.Remove(WORKOUTS_CACHE_KEY);
-        return NoContent();
+                await _workoutRepository.UpdateAsync(workout);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var workout = await _workoutRepository.GetByIdAsync(id);
+            if (workout != null)
+            {
+                await _workoutRepository.DeleteAsync(workout);
+            }
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

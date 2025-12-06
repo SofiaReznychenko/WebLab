@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
+namespace ReznichenkoWeb.Models;
+
 public class Workout
 {
     public int Id { get; set; }

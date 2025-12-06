@@ -1,36 +1,23 @@
 using Microsoft.AspNetCore.Mvc;
-using FluentValidation;
-using Microsoft.Extensions.Caching.Memory;
+using ReznichenkoWeb.ViewModels;
+using ReznichenkoWeb.Models;
+using ReznichenkoWeb.Repositories;
 
-[ApiController]
-[Route("api/[controller]")]
-public class TrainersController : ControllerBase
+namespace ReznichenkoWeb.Controllers
 {
-    private readonly ITrainerRepository _trainerRepository;
-    private readonly IValidator<CreateTrainerDto> _createTrainerValidator;
-    private readonly IValidator<UpdateTrainerDto> _updateTrainerValidator;
-    private readonly IMemoryCache _cache;
-    private const string TRAINERS_CACHE_KEY = "trainers_all";
-
-    public TrainersController(
-        ITrainerRepository trainerRepository,
-        IValidator<CreateTrainerDto> createTrainerValidator,
-        IValidator<UpdateTrainerDto> updateTrainerValidator,
-        IMemoryCache cache)
+    public class TrainersController : Controller
     {
-        _trainerRepository = trainerRepository;
-        _createTrainerValidator = createTrainerValidator;
-        _updateTrainerValidator = updateTrainerValidator;
-        _cache = cache;
-    }
+        private readonly ITrainerRepository _trainerRepository;
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<TrainerDto>>> GetAllTrainers()
-    {
-        if (!_cache.TryGetValue(TRAINERS_CACHE_KEY, out IEnumerable<TrainerDto> trainerDtos))
+        public TrainersController(ITrainerRepository trainerRepository)
+        {
+            _trainerRepository = trainerRepository;
+        }
+
+        public async Task<IActionResult> Index()
         {
             var trainers = await _trainerRepository.GetAllAsync();
-            trainerDtos = trainers.Select(t => new TrainerDto
+            var viewModels = trainers.Select(t => new TrainerViewModel
             {
                 Id = t.Id,
                 Name = t.Name,
@@ -42,118 +29,92 @@ public class TrainersController : ControllerBase
                 Email = t.Email
             }).ToList();
 
-            var cacheOptions = new MemoryCacheEntryOptions()
-                .SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
-
-            _cache.Set(TRAINERS_CACHE_KEY, trainerDtos, cacheOptions);
+            return View(viewModels);
         }
 
-        return Ok(trainerDtos);
-    }
-
-    [HttpGet("{id}")]
-    public async Task<ActionResult<TrainerDto>> GetTrainerById(int id)
-    {
-        var trainer = await _trainerRepository.GetByIdAsync(id);
-        if (trainer == null)
-            return NotFound($"Тренер з ID {id} не знайдений");
-
-        var trainerDto = new TrainerDto
+        public IActionResult Create()
         {
-            Id = trainer.Id,
-            Name = trainer.Name,
-            Age = trainer.Age,
-            Gender = trainer.Gender,
-            Experience = trainer.Experience,
-            Specialization = trainer.Specialization,
-            Phone = trainer.Phone,
-            Email = trainer.Email
-        };
-        return Ok(trainerDto);
-    }
+            return View();
+        }
 
-    [HttpPost]
-    public async Task<ActionResult<TrainerDto>> CreateTrainer([FromBody] CreateTrainerDto createTrainerDto)
-    {
-        var validationResult = await _createTrainerValidator.ValidateAsync(createTrainerDto);
-        if (!validationResult.IsValid)
-            return BadRequest(validationResult.Errors);
-
-        var trainer = new Trainer
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(TrainerViewModel model)
         {
-            Name = createTrainerDto.Name,
-            Age = createTrainerDto.Age,
-            Gender = createTrainerDto.Gender,
-            Experience = createTrainerDto.Experience,
-            Specialization = createTrainerDto.Specialization,
-            Phone = createTrainerDto.Phone,
-            Email = createTrainerDto.Email
-        };
+            if (ModelState.IsValid)
+            {
+                var trainer = new Trainer
+                {
+                    Name = model.Name,
+                    Age = model.Age,
+                    Gender = model.Gender,
+                    Experience = model.Experience,
+                    Specialization = model.Specialization,
+                    Phone = model.Phone,
+                    Email = model.Email
+                };
 
-        await _trainerRepository.AddAsync(trainer);
-        _cache.Remove(TRAINERS_CACHE_KEY);
+                await _trainerRepository.AddAsync(trainer);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
 
-        var trainerDto = new TrainerDto
+        public async Task<IActionResult> Edit(int id)
         {
-            Id = trainer.Id,
-            Name = trainer.Name,
-            Age = trainer.Age,
-            Gender = trainer.Gender,
-            Experience = trainer.Experience,
-            Specialization = trainer.Specialization,
-            Phone = trainer.Phone,
-            Email = trainer.Email
-        };
+            var trainer = await _trainerRepository.GetByIdAsync(id);
+            if (trainer == null) return NotFound();
 
-        return CreatedAtAction(nameof(GetTrainerById), new { id = trainerDto.Id }, trainerDto);
-    }
+            var model = new TrainerViewModel
+            {
+                Id = trainer.Id,
+                Name = trainer.Name,
+                Age = trainer.Age,
+                Gender = trainer.Gender,
+                Experience = trainer.Experience,
+                Specialization = trainer.Specialization,
+                Phone = trainer.Phone,
+                Email = trainer.Email
+            };
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult<TrainerDto>> UpdateTrainer(int id, [FromBody] UpdateTrainerDto updateTrainerDto)
-    {
-        var validationResult = await _updateTrainerValidator.ValidateAsync(updateTrainerDto);
-        if (!validationResult.IsValid)
-            return BadRequest(validationResult.Errors);
+            return View(model);
+        }
 
-        var trainer = await _trainerRepository.GetByIdAsync(id);
-        if (trainer == null)
-            return NotFound($"Тренер з ID {id} не знайдений");
-
-        trainer.Name = updateTrainerDto.Name;
-        trainer.Age = updateTrainerDto.Age;
-        trainer.Gender = updateTrainerDto.Gender;
-        trainer.Experience = updateTrainerDto.Experience;
-        trainer.Specialization = updateTrainerDto.Specialization;
-        trainer.Phone = updateTrainerDto.Phone;
-        trainer.Email = updateTrainerDto.Email;
-
-        await _trainerRepository.UpdateAsync(trainer);
-        _cache.Remove(TRAINERS_CACHE_KEY);
-
-        var trainerDto = new TrainerDto
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, TrainerViewModel model)
         {
-            Id = trainer.Id,
-            Name = trainer.Name,
-            Age = trainer.Age,
-            Gender = trainer.Gender,
-            Experience = trainer.Experience,
-            Specialization = trainer.Specialization,
-            Phone = trainer.Phone,
-            Email = trainer.Email
-        };
+            if (id != model.Id) return NotFound();
 
-        return Ok(trainerDto);
-    }
+            if (ModelState.IsValid)
+            {
+                var trainer = await _trainerRepository.GetByIdAsync(id);
+                if (trainer == null) return NotFound();
 
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteTrainer(int id)
-    {
-        var trainer = await _trainerRepository.GetByIdAsync(id);
-        if (trainer == null)
-            return NotFound($"Тренер з ID {id} не знайдений");
+                trainer.Name = model.Name;
+                trainer.Age = model.Age;
+                trainer.Gender = model.Gender;
+                trainer.Experience = model.Experience;
+                trainer.Specialization = model.Specialization;
+                trainer.Phone = model.Phone;
+                trainer.Email = model.Email;
 
-        await _trainerRepository.DeleteAsync(trainer);
-        _cache.Remove(TRAINERS_CACHE_KEY);
-        return NoContent();
+                await _trainerRepository.UpdateAsync(trainer);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var trainer = await _trainerRepository.GetByIdAsync(id);
+            if (trainer != null)
+            {
+                await _trainerRepository.DeleteAsync(trainer);
+            }
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

@@ -1,6 +1,9 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using ReznichenkoWeb.Models;
+
+namespace ReznichenkoWeb.Repositories;
 
 public class Repository<T> : IRepository<T> where T : class
 {

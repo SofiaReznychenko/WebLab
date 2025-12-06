@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using ReznichenkoWeb.Models;
+
+namespace ReznichenkoWeb.Repositories;
 
 public class MemberRepository : Repository<Member>, IMemberRepository
 {

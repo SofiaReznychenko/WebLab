@@ -1,0 +1,64 @@
+@model ReznichenkoWeb.ViewModels.WorkoutViewModel
+
+@{
+    ViewData["Title"] = "Create Workout";
+}
+
+<h1>Create Workout</h1>
+
+<h4>Workout</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-3">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Instructor" class="control-label"></label>
+                <input asp-for="Instructor" class="form-control" />
+                <span asp-validation-for="Instructor" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="DurationMinutes" class="control-label"></label>
+                <input asp-for="DurationMinutes" class="form-control" />
+                <span asp-validation-for="DurationMinutes" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="MaxParticipants" class="control-label"></label>
+                <input asp-for="MaxParticipants" class="form-control" />
+                <span asp-validation-for="MaxParticipants" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="ScheduledDateTime" class="control-label"></label>
+                <input asp-for="ScheduledDateTime" class="form-control" />
+                <span asp-validation-for="ScheduledDateTime" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="WorkoutType" class="control-label"></label>
+                 <select asp-for="WorkoutType" class="form-control">
+                    <option value="Силові">Силові</option>
+                    <option value="Кардіо">Кардіо</option>
+                    <option value="Йога">Йога</option>
+                </select>
+                <span asp-validation-for="WorkoutType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

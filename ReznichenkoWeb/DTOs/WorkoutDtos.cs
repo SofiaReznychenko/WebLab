@@ -1,3 +1,7 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace ReznichenkoWeb.DTOs;
+
 public class WorkoutDto
 {
     public int Id { get; set; }

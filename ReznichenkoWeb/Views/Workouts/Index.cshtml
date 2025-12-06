@@ -1,0 +1,42 @@
+@model IEnumerable<ReznichenkoWeb.ViewModels.WorkoutViewModel>
+
+@{
+    ViewData["Title"] = "Workouts";
+}
+
+<h1>Workouts</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Instructor</th>
+            <th>Duration (min)</th>
+            <th>Participants</th>
+            <th>Date/Time</th>
+            <th>Type</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.Instructor</td>
+            <td>@item.DurationMinutes</td>
+            <td>@item.MaxParticipants</td>
+            <td>@item.ScheduledDateTime.ToLocalTime()</td>
+            <td>@item.WorkoutType</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+                <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?');">Delete</button>
+                </form>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -5,6 +5,11 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 
 using Serilog;
+using ReznichenkoWeb;
+using ReznichenkoWeb.Repositories;
+using ReznichenkoWeb.Models;
+using ReznichenkoWeb.DTOs;
+using ReznichenkoWeb.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +22,9 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllersWithViews();
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -66,6 +73,11 @@ app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.MapControllers();
 
 try

@@ -1,4 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using ReznichenkoWeb.Models;
+
+namespace ReznichenkoWeb;
 
 public class GymContext : DbContext
 {

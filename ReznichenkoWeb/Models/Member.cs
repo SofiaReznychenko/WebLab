@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
+namespace ReznichenkoWeb.Models;
+
 public class Member
 {
     public int Id { get; set; }

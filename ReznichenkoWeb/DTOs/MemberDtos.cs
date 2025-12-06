@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
+namespace ReznichenkoWeb.DTOs;
+
 public class MemberDto
 {
     public int Id { get; set; }

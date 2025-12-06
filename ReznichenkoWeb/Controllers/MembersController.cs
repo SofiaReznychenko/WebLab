@@ -1,40 +1,23 @@
 using Microsoft.AspNetCore.Mvc;
-using FluentValidation;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
+using ReznichenkoWeb.ViewModels;
+using ReznichenkoWeb.Models;
+using ReznichenkoWeb.Repositories;
 
-[ApiController]
-[Route("api/[controller]")]
-public class MembersController : ControllerBase
+namespace ReznichenkoWeb.Controllers
 {
-    private readonly IMemberRepository _memberRepository;
-    private readonly IValidator<CreateMemberDto> _createMemberValidator;
-    private readonly IValidator<UpdateMemberDto> _updateMemberValidator;
-    private readonly IMemoryCache _cache;
-    private readonly GymSettings _settings;
-    private const string MEMBERS_CACHE_KEY = "members_all";
-
-    public MembersController(
-        IMemberRepository memberRepository,
-        IValidator<CreateMemberDto> createMemberValidator,
-        IValidator<UpdateMemberDto> updateMemberValidator,
-        IMemoryCache cache,
-        IOptionsSnapshot<GymSettings> settings)
+    public class MembersController : Controller
     {
-        _memberRepository = memberRepository;
-        _createMemberValidator = createMemberValidator;
-        _updateMemberValidator = updateMemberValidator;
-        _cache = cache;
-        _settings = settings.Value;
-    }
+        private readonly IMemberRepository _memberRepository;
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<MemberDto>>> GetAllMembers()
-    {
-        if (!_cache.TryGetValue(MEMBERS_CACHE_KEY, out IEnumerable<MemberDto> memberDtos))
+        public MembersController(IMemberRepository memberRepository)
+        {
+            _memberRepository = memberRepository;
+        }
+
+        public async Task<IActionResult> Index()
         {
             var members = await _memberRepository.GetAllAsync();
-            memberDtos = members.Select(m => new MemberDto
+            var memberViewModels = members.Select(m => new MemberViewModel
             {
                 Id = m.Id,
                 Name = m.Name,
@@ -47,127 +30,94 @@ public class MembersController : ControllerBase
                 Gender = m.Gender
             }).ToList();
 
-            var cacheOptions = new MemoryCacheEntryOptions()
-                .SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
-
-            _cache.Set(MEMBERS_CACHE_KEY, memberDtos, cacheOptions);
+            return View(memberViewModels);
         }
 
-        return Ok(memberDtos);
-    }
-
-    [HttpGet("{id}")]
-    public async Task<ActionResult<MemberDto>> GetMemberById(int id)
-    {
-        var member = await _memberRepository.GetByIdAsync(id);
-        if (member == null)
-            return NotFound($"Член з ID {id} не знайдений");
-
-        var memberDto = new MemberDto
+        public IActionResult Create()
         {
-            Id = member.Id,
-            Name = member.Name,
-            Email = member.Email,
-            Phone = member.Phone,
-            JoinDate = member.JoinDate,
-            MembershipType = member.MembershipType,
-            IsActive = member.IsActive,
-            Age = member.Age,
-            Gender = member.Gender
-        };
-        return Ok(memberDto);
-    }
-
-    [HttpPost]
-    public async Task<ActionResult<MemberDto>> CreateMember([FromBody] CreateMemberDto createMemberDto)
-    {
-        if (!_settings.AllowNewRegistrations)
-        {
-            return BadRequest("Реєстрація нових членів тимчасово припинена адміністратором.");
+            return View();
         }
 
-        var validationResult = await _createMemberValidator.ValidateAsync(createMemberDto);
-        if (!validationResult.IsValid)
-            return BadRequest(validationResult.Errors);
-
-        var member = new Member
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(MemberViewModel model)
         {
-            Name = createMemberDto.Name,
-            Email = createMemberDto.Email,
-            Phone = createMemberDto.Phone,
-            MembershipType = createMemberDto.MembershipType,
-            JoinDate = DateTime.UtcNow,
-            IsActive = true,
-            Age = createMemberDto.Age,
-            Gender = createMemberDto.Gender
-        };
+            if (ModelState.IsValid)
+            {
+                var member = new Member
+                {
+                    Name = model.Name,
+                    Email = model.Email,
+                    Phone = model.Phone,
+                    MembershipType = model.MembershipType,
+                    JoinDate = DateTime.UtcNow,
+                    IsActive = true,
+                    Age = model.Age,
+                    Gender = model.Gender
+                };
 
-        await _memberRepository.AddAsync(member);
-        _cache.Remove(MEMBERS_CACHE_KEY);
+                await _memberRepository.AddAsync(member);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
 
-        var memberDto = new MemberDto
+        public async Task<IActionResult> Edit(int id)
         {
-            Id = member.Id,
-            Name = member.Name,
-            Email = member.Email,
-            Phone = member.Phone,
-            JoinDate = member.JoinDate,
-            MembershipType = member.MembershipType,
-            IsActive = member.IsActive,
-            Age = member.Age,
-            Gender = member.Gender
-        };
+            var member = await _memberRepository.GetByIdAsync(id);
+            if (member == null) return NotFound();
 
-        return CreatedAtAction(nameof(GetMemberById), new { id = memberDto.Id }, memberDto);
-    }
+            var model = new MemberViewModel
+            {
+                Id = member.Id,
+                Name = member.Name,
+                Email = member.Email,
+                Phone = member.Phone,
+                JoinDate = member.JoinDate,
+                MembershipType = member.MembershipType,
+                IsActive = member.IsActive,
+                Age = member.Age,
+                Gender = member.Gender
+            };
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult<MemberDto>> UpdateMember(int id, [FromBody] UpdateMemberDto updateMemberDto)
-    {
-        var validationResult = await _updateMemberValidator.ValidateAsync(updateMemberDto);
-        if (!validationResult.IsValid)
-            return BadRequest(validationResult.Errors);
+            return View(model);
+        }
 
-        var member = await _memberRepository.GetByIdAsync(id);
-        if (member == null)
-            return NotFound($"Член з ID {id} не знайдений");
-
-        member.Name = updateMemberDto.Name;
-        member.Email = updateMemberDto.Email;
-        member.Phone = updateMemberDto.Phone;
-        member.MembershipType = updateMemberDto.MembershipType;
-        member.IsActive = updateMemberDto.IsActive;
-        member.Age = updateMemberDto.Age;
-        member.Gender = updateMemberDto.Gender;
-
-        await _memberRepository.UpdateAsync(member);
-        _cache.Remove(MEMBERS_CACHE_KEY);
-
-        var memberDto = new MemberDto
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, MemberViewModel model)
         {
-            Id = member.Id,
-            Name = member.Name,
-            Email = member.Email,
-            Phone = member.Phone,
-            JoinDate = member.JoinDate,
-            MembershipType = member.MembershipType,
-            IsActive = member.IsActive,
-            Age = member.Age,
-            Gender = member.Gender
-        };
+            if (id != model.Id) return NotFound();
 
-        return Ok(memberDto);
-    }
+            if (ModelState.IsValid)
+            {
+                var member = await _memberRepository.GetByIdAsync(id);
+                if (member == null) return NotFound();
 
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteMember(int id)
-    {
-        var member = await _memberRepository.GetByIdAsync(id);
-        if (member == null)
-            return NotFound($"Член з ID {id} не знайдений");
+                member.Name = model.Name;
+                member.Email = model.Email;
+                member.Phone = model.Phone;
+                member.MembershipType = model.MembershipType;
+                member.IsActive = model.IsActive;
+                member.Age = model.Age;
+                member.Gender = model.Gender;
 
-        await _memberRepository.DeleteAsync(member);
-        _cache.Remove(MEMBERS_CACHE_KEY);
-        return NoContent();
+                await _memberRepository.UpdateAsync(member);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var member = await _memberRepository.GetByIdAsync(id);
+            if (member != null)
+            {
+                await _memberRepository.DeleteAsync(member);
+            }
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
